@@ -50,7 +50,7 @@ const [data, setData] = useState([])
         <CardContent>
           <ChartContainer 
            config={paymentChartConfig}
-          className="mx-auto aspect-square max-h-[250px]"
+          className="mx-auto aspect-square max-h-62.5"
           >
             <PieChart>
                <ChartTooltip

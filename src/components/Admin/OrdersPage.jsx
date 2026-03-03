@@ -1,47 +1,65 @@
-import { server } from '@/main'
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import toast from 'react-hot-toast'
-import Loading from '../Loading'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
-import { Input } from '../ui/input'
-import { Link } from 'react-router-dom'
-import dayjs from 'dayjs'
-
+import { server } from "@/main";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import Loading from "../Loading";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
+import { Input } from "../ui/input";
+import { Link } from "react-router-dom";
+import dayjs from "dayjs";
 
 const OrdersPage = () => {
-  const [orders, setOrders] = useState([])
-  const [search, setSearch] = useState("")
-  const [loading, setLoading]= useState(false)
-  const fetchOrders = async()=>{
-    setLoading(true)
+  const [orders, setOrders] = useState([]);
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
+  const fetchOrders = async () => {
+    setLoading(true);
     try {
-      const {data} = await axios.get(`${server}/api/v1/order/admin/all`, {withCredentials:true})
-      setOrders(data.orders)
-      setLoading(false)
+      const { data } = await axios.get(`${server}/api/v1/order/admin/all`, {
+        withCredentials: true,
+      });
+      setOrders(data.orders);
+      setLoading(false);
     } catch (error) {
-      console.log(error)
-      setLoading(false)
+      console.log(error);
+      setLoading(false);
     }
-  }
-  useEffect(()=>{
-    fetchOrders()
-  },[])
-  const updateOrderStatus = async(orderId, status)=>{
-    setLoading(true)
-      try {
-        const {data}= await axios.post(`${server}/api/v1/order/${orderId}`, {status}, {withCredentials:true})
-        toast.success(data.message);
-        fetchOrders()
-        setLoading(false)
-      } catch (error) {
-        console.log(error)
-        setLoading(false)
-      }
-  }
-  const filteredOrders = orders.filter((order)=>order.user.email.toLocaleLowerCase().includes(search.toLocaleLowerCase())|| order._id.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
+  };
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+  const updateOrderStatus = async (orderId, status) => {
+    setLoading(true);
+    try {
+      const { data } = await axios.post(
+        `${server}/api/v1/order/${orderId}`,
+        { status },
+        { withCredentials: true },
+      );
+      toast.success(data.message);
+      fetchOrders();
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+  const filteredOrders = orders.filter(
+    (order) =>
+      order?.user?.email
+        ?.toLocaleLowerCase()
+        .includes(search.toLocaleLowerCase()) ||
+      order._id.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
+  );
   return (
-     <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6">
       <h1 className="text-2xl font-bold">Manage Orders</h1>
 
       <Input
@@ -72,7 +90,7 @@ const OrdersPage = () => {
                   <TableCell>
                     <Link to={`/order/${order._id}`}>{order._id}</Link>
                   </TableCell>
-                  <TableCell>{order.user.email}</TableCell>
+                  <TableCell>{order.user?.email}</TableCell>
                   <TableCell>{order.subTotal}</TableCell>
                   <TableCell>
                     <span
@@ -80,8 +98,8 @@ const OrdersPage = () => {
                         order.status === "Pending"
                           ? "bg-yellow-500"
                           : order.status === "Shipped"
-                          ? "bg-blue-500"
-                          : "bg-green-500"
+                            ? "bg-blue-500"
+                            : "bg-green-500"
                       }`}
                     >
                       {order.status}
@@ -112,7 +130,7 @@ const OrdersPage = () => {
         <p>No Orders</p>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default OrdersPage
+export default OrdersPage;
