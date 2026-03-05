@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { CircleUser, LogOut, ShoppingCart, User } from "lucide-react";
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ModeToggle } from "./mode-toggle";
 import { userData } from "@/context/UserContext";
 import { CardData } from "@/context/CartContext";
@@ -24,7 +24,10 @@ const Navbar = () => {
   return (
     <div className="z-50 sticky top-0 bg-background/50 border-b backdrop-blur px-2">
       <div className="container mx-auto px-6 py-4 flex flex-col sm:flex-row items-center justify-between">
-        <h1 className="text-2xl font-bold">YoCart</h1>
+        <Link to={"/"}>
+         <h1 className="text-2xl font-bold">YoCart</h1>
+        </Link>
+       
         <ul className="flex justify-center items-center space-x-6">
           <li className="cursor-pointer" onClick={() => navigate("/")}>
             Home

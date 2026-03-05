@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { CardData } from "@/context/CartContext";
+import { server } from "@/main";
 import axios from "axios";
 import { Loader } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
@@ -42,7 +43,7 @@ function OrderProccesing() {
           navigate("/orders");
         }, 3000);
       } catch (error) {
-        console.error("VERIFY ERROR:", error.response);
+        console.error("VERIFY ERROR:", error);
         toast.error(
           error.response?.data?.message || "Payment verification failed",
         );

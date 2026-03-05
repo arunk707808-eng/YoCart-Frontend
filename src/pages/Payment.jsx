@@ -70,7 +70,6 @@ const Payment = () => {
   useEffect(() => {
     fetchAddress(id);
   }, [id]);
-  console.log(address);
   return (
     <div>
       {loading ? (

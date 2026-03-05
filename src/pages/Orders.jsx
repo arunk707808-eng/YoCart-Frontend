@@ -1,53 +1,59 @@
-import Loading from '@/components/Loading'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { server } from '@/main'
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import Loading from "@/components/Loading";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { server } from "@/main";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 
 const Orders = () => {
-  const [loading, setLoading] = useState(false)
-  const [orders, setOrders] = useState([])
-  const navigate = useNavigate()
-  const fatchAllOrders = async()=>{
+  const [loading, setLoading] = useState(false);
+  const [orders, setOrders] = useState([]);
+  const navigate = useNavigate();
+  const fatchAllOrders = async () => {
     try {
-      setLoading(true)
-      const {data} = await axios.get(`${server}/api/v1/order/all`, {withCredentials:true})
-      setOrders(data.orders)
-
+      setLoading(true);
+      const { data } = await axios.get(`${server}/api/v1/order/all`, {
+        withCredentials: true,
+      });
+      setOrders(data.orders);
     } catch (error) {
-      console.log(error)
-
-    }finally{
-      setLoading(false)
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
+  };
+  useEffect(() => {
+    fatchAllOrders();
+  }, []);
+  if (loading) {
+    return <Loading />;
   }
-  console.log(orders)
-  useEffect(()=>{fatchAllOrders()},[])
-  if(loading){
-    return <Loading/>
-  }
-  if(orders.length===0){
-    return <div className='min-h-[70vh] flex flex-col items-center justify-center  '>
-      <h1>No Orders Yet</h1>
-      <Button onClick={()=>navigate("/product")}>Shop Now</Button>
-    </div>
+  if (orders.length === 0) {
+    return (
+      <div className="min-h-[70vh] flex flex-col items-center justify-center  ">
+        <h1>No Orders Yet</h1>
+        <Button onClick={() => navigate("/product")}>Shop Now</Button>
+      </div>
+    );
   }
   return (
-    <div className='container mx-auto py-6 px-4 min-h-[70vh]'>
-       <div className="text-3xl font-bold mb-6 text-center">Your Orders</div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {orders?.map((order)=>{
-            return <Card
-             key={order._id}
-              className="shadow-sm hover:shadow-lg transition-shadow duration-200">
-                <CardHeader>
+    <div className="container mx-auto py-6 px-4 min-h-[70vh]">
+      <div className="text-3xl font-bold mb-6 text-center">Your Orders</div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {orders?.map((order) => {
+          return (
+            <Card
+              key={order._id}
+              className="shadow-sm hover:shadow-lg transition-shadow duration-200"
+            >
+              <CardHeader>
                 <CardTitle className="text-xl font-semibold">
                   Order #{order._id.toUpperCase()}
                 </CardTitle>
               </CardHeader>
-               <CardContent>
+              <CardContent>
                 <p>
                   <strong>Status: </strong>
                   <span
@@ -73,7 +79,7 @@ const Orders = () => {
                 <p>
                   <strong>Placed At: </strong>
 
-                  {new Date(order.createAt).toLocaleDateString()}
+                  {dayjs(order.createdAt).format("DD MM YYYY")}
                 </p>
                 <Button
                   className="mt-4"
@@ -81,13 +87,13 @@ const Orders = () => {
                 >
                   View Details
                 </Button>
-               </CardContent>
+              </CardContent>
             </Card>
-          })}
-        </div>
-     
+          );
+        })}
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Orders
+export default Orders;
